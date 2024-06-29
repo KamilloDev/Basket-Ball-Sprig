@@ -8,6 +8,15 @@ https://sprig.hackclub.com/gallery/getting_started
 @tags: [Animal, Rescue]
 @addedOn: 2024-29-06
 */
+/*
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
+@title: Rescue your chinchilla!
+@author: KamilloDev
+@tags: [Animal, Rescue]
+@addedOn: 2024-29-06
+*/
 
 const player = "p"
 const chinchilla = 'c'
@@ -15,6 +24,44 @@ const background = 'g'
 const bush = 'b'
 const wall = 'w'
 const house = 'h'
+const coin = 'p'
+const music = tune`
+217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + B4~217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + B4~217.3913043478261 + C5~217.3913043478261 + D5/217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5~217.3913043478261 + D5/217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5~217.3913043478261 + B4~217.3913043478261 + D5/217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + B4~217.3913043478261 + D5/217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + B4~217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + B4~217.3913043478261 + C5~217.3913043478261,
+217.3913043478261: C5~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: C5~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: B4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: B4~217.3913043478261 + A4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: A4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: B4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: B4~217.3913043478261 + C5~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: C5~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
+217.3913043478261: B4~217.3913043478261 + A4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: A4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: A4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: A4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: A4~217.3913043478261 + C4^217.3913043478261,
+217.3913043478261: A4~217.3913043478261 + B4~217.3913043478261 + C4^217.3913043478261 + C5/217.3913043478261,
+217.3913043478261: B4~217.3913043478261 + C4^217.3913043478261 + C5/217.3913043478261,
+217.3913043478261: B4~217.3913043478261 + C4^217.3913043478261 + C5/217.3913043478261,
+217.3913043478261: B4~217.3913043478261 + C4^217.3913043478261 + C5/217.3913043478261,
+217.3913043478261: C4^217.3913043478261 + C5/217.3913043478261`
+const movechin = tune`
+500: C4~500,
+15500`
+playTune(music, Infinity)
 
 setLegend(
   [ player, bitmap`
@@ -118,8 +165,12 @@ L2222C111CC2222L
 L2222C111CC2222L
 LCCCCCL11CCCCCCL
 LCCCCC111CCCCCCL
-LLLLLLLLLLLLLLLL` ]
+LLLLLLLLLLLLLLLL` ],
+  //[coin, 
 )
+
+
+
 
 setSolids([player, wall, bush, chinchilla])
 
@@ -130,51 +181,51 @@ setPushables({
 let level = 0
 const levels = [
   map`
-...b.bw....
-..w...w.c..
-.bw.b.ww...
-.ww....w.wb
-ww.b...ww..
-.........b.
-.www..w.ww.
-..hwbww....
-b..w.wpb...
-..bw.w.b...`,
+...wpw...
+wwww..w..
+w...b.w..
+w..c.w...
+wwww.w...
+...w.w...
+...w.w...
+...whw...`,
   map`
-......ww...
-..w...w....
-.bw.b.wwc.w
+h.w...ww..w
+..w...w...w
+.bw.b.w.c.w
 .ww....w..w
-ww.b...ww.w
-......b...w
-.www..www..
-..hw.w.b...
-...w.wpb...`,
+.w.....ww..
+......b....
+.www..www.w
+...w.w.b..w
+.....wpb..w`,
   map`
-wwwwwwwwwww
-w...w.w...w
-wb..b.w.c.w
-w.w.w.www.w
-w..bw.....w
-ww.w.wwwwbw
-w..w...w..w
-wh.....w.pw
-wwwwwwwwwww`,
+...b.bw.....
+..w...w.c...
+.bw.b.ww....
+.ww....w.wb.
+.w.b...ww...
+.........b..
+.www..w.ww..
+.b.wbww.....
+...w.wpb....
+h.bw.w.b....`,
   map`
-wwwwwwwwwww
-w...w.w...w
-wb..b.w.c.w
-w.w.w.www.w
-w..bw.....w
-ww.w.wwwwbw
-w..w...w..w
-wh.....w.pw
-wwwwwwwwwww`
+h.wb....wwp.
+..ww.w..ww..
+.bw..b..wwbw
+.wwww.w.....
+.w..wcw.....
+....w.w.....
+.w...b.....w
+....b..www.w
+...w...b....
+.....w.b....`
 ]
 
 setMap(levels[level])
 
-
+let prechin = {"x": getFirst(chinchilla).x, "y": getFirst(chinchilla).y} 
 
 onInput("s", () => {
   getFirst(player).y += 1
@@ -192,12 +243,25 @@ onInput("j", () => {
   setMap(levels[level])
 })
 
-addText('Press J to ', {x:4, y:7, color:`3`})
-addText('reset level', {x:4, y:8, color:`3`})
+addText('Press J to ', {x:4, y:7, color:color`3`})
+addText('reset level', {x:4, y:8, color:color`3`})
 
 afterInput(() => {
   clearText()
-  if(tilesWith(chinchilla, house).length >= 1){
-      addText("you've won!", {x:4, y:8, color:`1`})
+  let poschin = {"x": getFirst(chinchilla).x, "y": getFirst(chinchilla).y}
+  
+  if(tilesWith(chinchilla, house).length >= 1 && level == 3){
+      addText("you've won!", {x:4, y:8, color:color`8`})
+  }else if(tilesWith(chinchilla, house).length >= 1){
+    level += 1
+    setMap(levels[level])
+    
   }
-})
+  if (prechin.x != poschin.x || prechin.y != poschin.y){
+    playTune(movechin, 1)
+    prechin = poschin
+  }
+
+
+}
+)
