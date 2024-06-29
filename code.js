@@ -1,13 +1,3 @@
-// Spirg game about retrieving your chinchilla!
-/*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Rescue your chinchilla!
-@author: KamilloDev
-@tags: [Animal, Rescue]
-@addedOn: 2024-29-06
-*/
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
@@ -24,7 +14,7 @@ const background = 'g'
 const bush = 'b'
 const wall = 'w'
 const house = 'h'
-const coin = 'p'
+const coin = 'l'
 const music = tune`
 217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
 217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
@@ -166,7 +156,23 @@ L2222C111CC2222L
 LCCCCCL11CCCCCCL
 LCCCCC111CCCCCCL
 LLLLLLLLLLLLLLLL` ],
-  //[coin, 
+    [coin, bitmap `
+....66666666....
+...666FFF6666...
+..66FFF6666666..
+.66FF6666666666.
+66FF666666666666
+6FF6666666666666
+6F66666...666666
+6F6666.....66666
+666666.....66666
+6666666...666FF6
+666666666666FF66
+66666666666FF666
+.666666666FF666.
+..6666666FF666..
+...6666FFF666...
+....66666666....`]
 )
 
 
@@ -179,29 +185,30 @@ setPushables({
 })
 
 let level = 0
+let coins = 0
 const levels = [
   map`
 ...wpw...
-wwww..w..
+wwww.lw..
 w...b.w..
 w..c.w...
 wwww.w...
 ...w.w...
-...w.w...
+...wlw...
 ...whw...`,
   map`
-h.w...ww..w
+hlw...ww..w
 ..w...w...w
 .bw.b.w.c.w
 .ww....w..w
 .w.....ww..
 ......b....
 .www..www.w
-...w.w.b..w
+..lw.w.b..w
 .....wpb..w`,
   map`
 ...b.bw.....
-..w...w.c...
+.lw...w.c...
 .bw.b.ww....
 .ww....w.wb.
 .w.b...ww...
@@ -209,9 +216,9 @@ h.w...ww..w
 .www..w.ww..
 .b.wbww.....
 ...w.wpb....
-h.bw.w.b....`,
+h.bw.w.b...l`,
   map`
-h.wb....wwp.
+hlwb.l..wwp.
 ..ww.w..ww..
 .bw..b..wwbw
 .wwww.w.....
@@ -249,9 +256,20 @@ addText('reset level', {x:4, y:8, color:color`3`})
 afterInput(() => {
   clearText()
   let poschin = {"x": getFirst(chinchilla).x, "y": getFirst(chinchilla).y}
+  let obstacles = getAll(coin);
+  let playerpos = {"x": getFirst(player).x, "y": getFirst(player).y}
+  for (let i = 0; i < obstacles.length; i++) {
+    if (obstacles[i].y == playerpos.y && obstacles[i].x == playerpos.x) {
+      coins += 1
+      obstacles[i].remove();
+    }
+  }
   
+  addText(`${coins} coins`, {x:1, y:1, color:color`8`})
   if(tilesWith(chinchilla, house).length >= 1 && level == 3){
-      addText("you've won!", {x:4, y:8, color:color`8`})
+      addText("you've won!", {x:4, y:9, color:color`8`})
+      addText(`you've collected`, {x:4, y:10, color:color`8`})
+      addText(`${coins} coins`, {x:4, y:11, color:color`8`})
   }else if(tilesWith(chinchilla, house).length >= 1){
     level += 1
     setMap(levels[level])
@@ -261,6 +279,11 @@ afterInput(() => {
     playTune(movechin, 1)
     prechin = poschin
   }
+
+ 
+
+  
+ 
 
 
 }
