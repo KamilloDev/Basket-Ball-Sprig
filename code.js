@@ -15,6 +15,8 @@ const bush = 'b'
 const wall = 'w'
 const house = 'h'
 const coin = 'l'
+const teleporter_f = 't'
+const teleporter_t = 'f'
 const music = tune`
 217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
 217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
@@ -156,7 +158,7 @@ L2222C111CC2222L
 LCCCCCL11CCCCCCL
 LCCCCC111CCCCCCL
 LLLLLLLLLLLLLLLL` ],
-    [coin, bitmap `
+  [coin, bitmap `
 ....66666666....
 ...666FFF6666...
 ..66FFF6666666..
@@ -172,7 +174,41 @@ LLLLLLLLLLLLLLLL` ],
 .666666666FF666.
 ..6666666FF666..
 ...6666FFF666...
-....66666666....`]
+....66666666....`],
+  [teleporter_f, bitmap `
+HHHHHHHHHHHHHHHH
+H88888888888888H
+H8HHHHHHHHHHHH8H
+H8H8888888888H8H
+H8H8HHHHHHH88H8H
+H8H88888888H8H8H
+H8H88HHHHH8H8H8H
+H8H8H8888H8H8H8H
+H8H8H8HH8H8H8H8H
+H8H8H8H88H8H8H8H
+H8H8H8HHH88H8H8H
+H8H88HHHHHH88H8H
+H8H8888888888H8H
+H8HHHHHHHHHHHH8H
+H88888888888888H
+HHHHHHHHHHHHHHHH`],
+  [teleporter_t, bitmap `
+HHHHHHHHHHHHHHHH
+H77777777777777H
+H7HHHHHHHHHHHH7H
+H7H7777777777H7H
+H7H7HHHHHHH77H7H
+H7H77777777H7H7H
+H7H77HHHHH7H7H7H
+H7H7H7777H7H7H7H
+H7H7H7HH7H7H7H7H
+H7H7H7H77H7H7H7H
+H7H7H7HHH77H7H7H
+H7H77HHHHHH77H7H
+H7H7777777777H7H
+H7HHHHHHHHHHHH7H
+H77777777777777H
+HHHHHHHHHHHHHHHH`]
 )
 
 
@@ -197,15 +233,25 @@ wwww.w...
 ...wlw...
 ...whw...`,
   map`
-hlw...ww..w
-..w...w...w
-.bw.b.w.c.w
-.ww....w..w
-.w.....ww..
-......b....
-.www..www.w
-..lw.w.b..w
-.....wpb..w`,
+.........
+wwww.wwww
+...w.w...
+...w.wf.h
+pctw.w...
+...w.w...
+wwww.wwww
+.........`,
+  map`
+...b.bw.....
+.lw...w.c...
+.bw.b.ww....
+.ww....w.wb.
+.w.b...ww...
+.........b..
+.www..w.ww..
+.b.wbww.....
+...w.wpb....
+h.bw.w.b...l`,
   map`
 ...b.bw.....
 .lw...w.c...
@@ -274,6 +320,16 @@ afterInput(() => {
     level += 1
     setMap(levels[level])
     
+  }
+ // Check if the chinchilla overlaps with the teleporter F
+  if (tilesWith(chinchilla, teleporter_f).length >= 1) {
+    const t_f = getFirst(teleporter_f);
+    const t_t = getFirst(teleporter_t);
+
+    // Teleport the chinchilla to the position of teleporter T
+    getFirst(chinchilla).x = t_t.x;
+    getFirst(chinchilla).y = t_t.y;
+  
   }
   if (prechin.x != poschin.x || prechin.y != poschin.y){
     playTune(movechin, 1)
