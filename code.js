@@ -17,6 +17,8 @@ const house = 'h'
 const coin = 'l'
 const teleporter_f = 't'
 const teleporter_t = 'f'
+const teleporter_f1 = 's'
+const teleporter_t1 = 'v'
 
 const fake_wall = 'r'
 const music = tune`
@@ -211,6 +213,40 @@ H7H7777777777H7H
 H7HHHHHHHHHHHH7H
 H77777777777777H
 HHHHHHHHHHHHHHHH`],
+  [teleporter_f1, bitmap `
+DDDDDDDDDDDDDDDD
+D66666666666666D
+D6DDDDDDDDDDDD6D
+D6D6666666666D6D
+D6D6DDDDDDD66D6D
+D6D66666666D6D6D
+D6D66DDDDD6D6D6D
+D6D6D6666D6D6D6D
+D6D6D6DD6D6D6D6D
+D6D6D6D66D6D6D6D
+D6D6D6DDD66D6D6D
+D6D66DDDDDD66D6D
+D6D6666666666D6D
+D6DDDDDDDDDDDD6D
+D66666666666666D
+DDDDDDDDDDDDDDDD`],
+  [teleporter_t1, bitmap `
+DDDDDDDDDDDDDDDD
+D99999999999999D
+D9DDDDDDDDDDDD9D
+D9D9999999999D9D
+D9D9DDDDDDD99D9D
+D9D99999999D9D9D
+D9D99DDDDD9D9D9D
+D9D9D9999D9D9D9D
+D9D9D9DD9D9D9D9D
+D9D9D9D99D9D9D9D
+D9D9D9DDD99D9D9D
+D9D99DDDDDD99D9D
+D9D9999999999D9D
+D9DDDDDDDDDDDD9D
+D99999999999999D
+DDDDDDDDDDDDDDDD`],
   [lever, bitmap `
 ................
 ............33..
@@ -256,7 +292,7 @@ setPushables({
 let level = 0
 let coins = 0
 const levels = [
-  map`
+ map`
 ...wpw...
 wwww.lw..
 w...b.w..
@@ -284,27 +320,28 @@ pc.www...
 wwww.wwww
 .........`,
   map`
-...b.bw.....
+..rb.bw.....
 .lw...w.c...
-.bw.b.ww....
+.bw.b.ww..rr
 .ww....w.wb.
 .w.b...ww...
-.........b..
-.www..w.ww..
+.r......rb..
+.www..wrww..
 .b.wbww.....
 ...w.wpb....
-h.bw.w.b...l`,
+h.bw.wyb...l`,
   map`
-...b.bw.....
-.lw...w.c...
-.bw.b.ww....
-.ww....w.wb.
-.w.b...ww...
-.........b..
-.www..w.ww..
-.b.wbww.....
-...w.wpb....
-h.bw.w.b...l`,
+lb...bw......
+...s..w..t..b
+.b....w......
+...p..wb.cb..
+......w......
+wwwwwwwwwwwww
+...b..rh...b.
+b.....r......
+......rb....b
+b..f..r..v...
+l.b...r....by`,
   map`
 hlwb.l..wwp.
 ..ww.w..ww..
@@ -317,7 +354,17 @@ hlwb.l..wwp.
 ...w...b....
 .....w.b....`
 ]
-
+/*map`
+s.lwf..lywtp
+.c.ww.wwwwwr
+...w......w.
+rwww..w...b.
+.w.b........
+.r......w..b
+.w..w.......
+.w.b...wb...
+.ww.....wwww
+.....b...v.h`,*/
 setMap(levels[level])
 
 let prechin = {"x": getFirst(chinchilla).x, "y": getFirst(chinchilla).y} 
@@ -369,7 +416,7 @@ afterInput(() => {
   
   addText(`${coins} coins`, { x: 1, y: 1, color: color`8` });
   
-  if (tilesWith(chinchilla, house).length >= 1 && level === 3) {
+  if (tilesWith(chinchilla, house).length >= 1 && level == 5) {
     addText("you've won!", { x: 4, y: 9, color: color`8` });
     addText("you've collected", { x: 4, y: 10, color: color`8` });
     addText(`${coins} coins`, { x: 4, y: 11, color: color`8` });
@@ -386,6 +433,9 @@ afterInput(() => {
     getFirst(chinchilla).x = t_t.x;
     getFirst(chinchilla).y = t_t.y;
   */
+
+
+  
    // Chinchilla teleportation outside the teleporter
    if (tilesWith(chinchilla, teleporter_f).length >= 1) {
     const t_f = getFirst(teleporter_f);
@@ -395,9 +445,14 @@ afterInput(() => {
     const t_t = getFirst(teleporter_t);
     const dx = t_t.x - t_f.x;
     const dy = t_t.y - t_f.y;
-
-    chinchillaPos.x = t_t.x + 1;
-    chinchillaPos.y = t_t.y + 1;
+    if (level == 1){
+      chinchillaPos.x = t_t.x + 1;
+      chinchillaPos.y = t_t.y + 1;
+    } else {
+      chinchillaPos.y = t_t.y + -1;
+    }
+    
+    
   }else if (tilesWith(chinchilla, teleporter_t).length >= 1) {
     const t_f = getFirst(teleporter_t);
     const chinchillaPos = getFirst(chinchilla);
@@ -407,8 +462,14 @@ afterInput(() => {
     const dx = t_t.x - t_f.x;
     const dy = t_t.y - t_f.y;
 
-    chinchillaPos.x = t_t.x + -1;
-    chinchillaPos.y = t_t.y + -1;
+    if (level == 1){
+      chinchillaPos.x = t_t.x + -1;
+      chinchillaPos.y = t_t.y + -1;
+    }else{
+      chinchillaPos.y = t_t.y + 1;
+    }
+    //chinchillaPos.x = t_t.x + 1;
+    chinchillaPos.y = t_t.y + 1;
    }
 
   // Player teleportation within the teleporter
@@ -428,6 +489,47 @@ afterInput(() => {
     // Teleport the player within the teleporter
     playerPos.x = t_f.x;
     playerPos.y = t_f.y;
+  }
+  
+  //------------------------------------------------------------------//
+  if (tilesWith(chinchilla, teleporter_f1).length >= 1) {
+    const t_f1 = getFirst(teleporter_f1);
+    const chinchillaPos1 = getFirst(chinchilla);
+    
+    // Move the chinchilla to be one tile away from teleporter_t
+    const t_t1 = getFirst(teleporter_t1);
+
+
+    //chinchillaPos1.x = t_t1.x + -1;
+    chinchillaPos1.y = t_t1.y + -1;
+  }else if (tilesWith(chinchilla, teleporter_t1).length >= 1) {
+    const t_f1 = getFirst(teleporter_t1);
+    const chinchillaPos1 = getFirst(chinchilla);
+    
+    // Move the chinchilla to be one tile away from teleporter_t
+    const t_t1 = getFirst(teleporter_f1);
+
+    //chinchillaPos1.x = t_t1.x + 1;
+    chinchillaPos1.y = t_t1.y + 1;
+   }
+
+  // Player teleportation within the teleporter
+  if (tilesWith(player, teleporter_f1).length >= 1) {
+    const t_f1 = getFirst(teleporter_f1);
+    const t_t1 = getFirst(teleporter_t1);
+    const playerPos = getFirst(player);
+
+    // Teleport the player within the teleporter
+    playerPos.x = t_t1.x;
+    playerPos.y = t_t1.y;
+  }else if (tilesWith(player, teleporter_t1).length >= 1) {
+    const t_f1 = getFirst(teleporter_f1);
+    const t_t1 = getFirst(teleporter_t1);
+    const playerPos = getFirst(player);
+
+    // Teleport the player within the teleporter
+    playerPos.x = t_f1.x;
+    playerPos.y = t_f1.y;
   }
   
   if (prechin.x != poschin.x || prechin.y != poschin.y){
