@@ -7,7 +7,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @tags: [Animal, Rescue]
 @addedOn: 2024-29-06
 */
-
+const lever = 'y'
 const player = "p"
 const chinchilla = 'c'
 const background = 'g'
@@ -17,7 +17,7 @@ const house = 'h'
 const coin = 'l'
 const teleporter_f = 't'
 const teleporter_t = 'f'
-const lever = 'y'
+
 const fake_wall = 'r'
 const music = tune`
 217.3913043478261: C4^217.3913043478261 + C5-217.3913043478261,
@@ -344,7 +344,7 @@ addText('reset level', {x:4, y:8, color:color`3`})
 afterInput(() => {
   clearText();
 
-  let levers = { "x": getFirst(lever).x, "y": getFirst(lever).y };
+  let lever_pos = getAll(lever)
   let poschin = { "x": getFirst(chinchilla).x, "y": getFirst(chinchilla).y };
   let obstacles = getAll(coin);
   let fakeWalls = getAll(fake_wall); // Change variable name to avoid naming conflict
@@ -358,10 +358,14 @@ afterInput(() => {
     }
   }
   
-  if (levers.y == playerpos.y && levers.x == playerpos.x) { // Use the correct variable name
-      fakeWalls.remove();
-  }
   
+  if (tilesWith(lever, player).length >= 1) {
+  let fakes = getAll(fake_wall);
+
+  for (let i = 0; i < fakes.length; i++) {
+    fakes[i].remove();
+  }
+}
   
   addText(`${coins} coins`, { x: 1, y: 1, color: color`8` });
   
